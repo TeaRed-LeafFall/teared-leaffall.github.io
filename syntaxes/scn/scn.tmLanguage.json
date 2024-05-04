@@ -1,0 +1,160 @@
+{
+	"name": "ScnScript",
+	"patterns": [
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#commands"
+		},
+		{
+			"include": "#node"
+		},
+		{
+			"include": "#obj"
+		},
+		{
+			"include": "#defstring"
+		}
+	],
+	"repository": {
+		"strings": {
+			"name": "string.quoted.double.scn",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.scn",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"match": "(;)(?!\\[\\[).*$\\n?",
+					"captures": {
+						"1": {
+							"name": "punctuation.definition.comment.scn"
+						}
+					},
+					"name": "comment.line.scn"
+				}
+			]
+    	},
+		"commands": {
+			"patterns": [
+				{
+					"match": "\\[(\\w+)(?:\\s+\\w+)*(?:\\s+(\\w+=\"[^\"]*\"))*\\]",
+					
+					"captures": {
+						"0":{
+							"name": "entity.name.command.scn"
+						},
+						"1": {
+							"name": "entity.name.command.scn"
+						},
+						"2": {
+							"patterns": [
+								{ "include": "#tag" }
+							]
+						}
+					},
+					
+					"name": "meta.command.scn"
+				}
+			]
+    	},
+		"node": {
+			"patterns": [
+                {
+                    "match": "^(\\s*)\\*[\\w\\-_]+(\\s+\\|\\s+(Start|End)|$)",
+                    "captures": {
+                        "0": {
+                            "name": "storage.type.label.scn"
+                        }
+                    },
+                    "name": "label.tag.scn"
+                }
+            ]
+		},
+		"obj": {
+			"patterns": [
+				{
+					"begin": "^[ \t]{0,}+@([a-zA-Z0-9_]+)",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.section.tag.scn"
+						},
+						"1": {
+							"name": "entity.name.tag.scn"
+						}
+					},
+					"end": "(\\n)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.tag.scn"
+						}
+					},
+					"patterns": [
+						{ "include": "#tag" }
+					],
+
+					"name": "tag.scn"
+				}
+			]
+		},
+		"tag": {
+            "patterns": [
+                {
+                    "match": "([\\w]+)\\s*(=)\\s*('[^']*'|\"[^\"]*\")",
+                    "captures": {
+                        "3": {
+                            "name": "string.scn"
+                        },
+                        "1": {
+                            "name": "entity.other.attribute-name.scn"
+                        },
+                        "2": {
+                            "name": "punctuation.section.tag.scn"
+                        }
+                    },
+                    "name": "tag.withquotes.scn"
+                },
+                {
+                    "match": "([\\w]+)\\s*(=)\\s*([\\w0-9-_]+)",
+                    "captures": {
+                        "3": {
+                            "name": "string.scn"
+                        },
+                        "1": {
+                            "name": "entity.other.attribute-name.scn"
+                        },
+                        "2": {
+                            "name": "punctuation.section.tag.scn"
+                        }
+                    },
+                    "name": "tag.noquotes.scn"
+                }
+            ]
+        },
+		"defstring":{
+			"patterns": [
+				{
+					"match": "^\\s*[\\w][^\\[]*|\\s*[\\w]+?",
+					"captures": {
+						"0": {
+							"name": "punctuation.section.tag.scn"
+						}
+					},
+					"name": "label.scn"
+				}
+			]
+		}
+
+	},
+	"scopeName": "source.scn"
+}
